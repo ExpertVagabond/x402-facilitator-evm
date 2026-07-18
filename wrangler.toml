@@ -1,0 +1,10 @@
+name = "x402-facilitator-evm"
+main = "src/index.ts"
+compatibility_date = "2026-07-18"
+compatibility_flags = ["nodejs_compat"]
+
+# Verify-only: this Worker holds no secrets and can move no funds. If /settle is ever
+# implemented, the signer key must be a Wrangler secret, never a [vars] entry.
+[vars]
+# Override the registry default RPC per chain if a private endpoint is preferred.
+# RPC_URL_ROBINHOOD = "https://..."
