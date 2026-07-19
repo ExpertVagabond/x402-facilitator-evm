@@ -1,5 +1,9 @@
 # x402-facilitator-evm
 
+[![CI](https://github.com/ExpertVagabond/x402-facilitator-evm/actions/workflows/ci.yml/badge.svg)](https://github.com/ExpertVagabond/x402-facilitator-evm/actions/workflows/ci.yml)
+[![Live chain canary](https://github.com/ExpertVagabond/x402-facilitator-evm/actions/workflows/live.yml/badge.svg)](https://github.com/ExpertVagabond/x402-facilitator-evm/actions/workflows/live.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Verify-only [x402](https://x402.org) facilitator for **Robinhood Chain** (`eip155:4663`), settling in **USDG**.
 
 ## Why this exists
@@ -84,8 +88,13 @@ npm run dev          # wrangler dev
 npm run deploy       # wrangler deploy
 ```
 
+### CI split
+
+- **`ci.yml`** gates every push, hermetically: typecheck on node 20/22/24 plus a static-route check. It also enforces the invariant this service exists under — a job greps `src/` for any signing or key-handling surface (`privateKey`, `mnemonic`, `signTransaction`, `walletClient`, …) and fails the build if one appears, and asserts `/settle` still returns `not_implemented`. Verify-only is a property CI defends, not just a README claim.
+- **`live.yml`** runs daily. It signs real authorizations against live chain state, so a failure means USDG changed underneath us — most consequentially a `DOMAIN_SEPARATOR` change, which would silently invalidate every signature this facilitator has ever accepted.
+
 Tests sign **real** EIP-3009 authorizations with throwaway keys and run them against live Robinhood Chain state. A fully valid payload from a fresh account lands on `insufficient_funds` — which is the proof that signature recovery and nonce lookup both succeeded, since they run first.
 
 ## Status
 
-Not deployed. Verify-only, no keys, no settlement.
+Not deployed (Cloudflare auth pending). Verify-only, no keys, no settlement.

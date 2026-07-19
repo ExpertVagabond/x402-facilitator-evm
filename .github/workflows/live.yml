@@ -1,0 +1,28 @@
+# Live-chain canary.
+#
+# Not on push. These tests sign real EIP-3009 authorizations and verify them against
+# live Robinhood Chain state, so a failure means the CHAIN moved, not the code.
+#
+# Specifically watching for:
+#   - USDG upgraded and its DOMAIN_SEPARATOR changed, which would silently
+#     invalidate every signature this facilitator has ever accepted
+#   - the RPC becoming unreachable or rate-limiting persistently
+name: Live chain canary
+
+on:
+  schedule:
+    - cron: "23 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  live:
+    name: live verification suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm test

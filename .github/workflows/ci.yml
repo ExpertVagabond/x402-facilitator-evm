@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # Hermetic: typecheck and bundle only. This gates a push.
+  build:
+    name: build (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22", "24"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run type-check
+      # Hermetic: constructs the app and exercises its static routes. /health is
+      # excluded deliberately — it asserts on-chain state and belongs in the canary.
+      - run: node --experimental-strip-types test/ci-routes.mjs
+
+  # Guards the one invariant that must never regress: this service holds no keys.
+  no-secrets:
+    name: verify-only invariant
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert no signing surface
+        run: |
+          if grep -rniE "privateKey|PRIVATE_KEY|mnemonic|signTransaction|sendRawTransaction|walletClient" src/; then
+            echo "FAIL: signing or key-handling surface found in src/."
+            echo "This facilitator is verify-only by design and must hold no keys."
+            exit 1
+          fi
+          echo "OK: no key handling in src/."
+      - name: Assert /settle stays unimplemented
+        run: |
+          grep -q "not_implemented" src/index.ts || {
+            echo "FAIL: /settle no longer returns not_implemented."
+            echo "Implementing settlement requires a funded signer and explicit sign-off."
+            exit 1
+          }
+          echo "OK: /settle is still refused."
