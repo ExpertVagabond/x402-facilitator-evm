@@ -1,7 +1,7 @@
 {
   "name": "x402-facilitator-evm",
   "version": "0.1.0",
-  "description": "Verify-only x402 facilitator for EVM chains \u2014 settles-by-verification on Robinhood Chain (eip155:4663) in USDG via EIP-3009",
+  "description": "Verify-only x402 facilitator for EVM chains — settles-by-verification on Robinhood Chain (eip155:4663) in USDG via EIP-3009",
   "type": "module",
   "main": "dist/index.js",
   "license": "MIT",
@@ -18,9 +18,9 @@
     "viem": "^2.21.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241127.0",
+    "@cloudflare/workers-types": "^5.20260719.1",
     "@types/node": "^26.1.1",
     "typescript": "^5.9.3",
-    "wrangler": "^3.90.0"
+    "wrangler": "^4.112.0"
   }
 }
