@@ -1,7 +1,7 @@
 {
   "name": "x402-facilitator-evm",
   "version": "0.1.0",
-  "description": "Verify-only x402 facilitator for EVM chains — settles-by-verification on Robinhood Chain (eip155:4663) in USDG via EIP-3009",
+  "description": "Verify-only x402 facilitator for EVM chains \u2014 settles-by-verification on Robinhood Chain (eip155:4663) in USDG via EIP-3009",
   "type": "module",
   "main": "dist/index.js",
   "license": "MIT",
@@ -11,9 +11,7 @@
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "sync:registry": "cp ../universal-blockchain-mcp/src/chains.ts src/chains.ts && node scripts/restore-vendor-header.mjs",
-    "check:registry": "bash scripts/check-registry-sync.sh",
-    "quality": "npm run check:registry && npm run type-check && npm run test"
+    "quality": "npm run type-check && npm run test"
   },
   "dependencies": {
     "hono": "^4.6.0",

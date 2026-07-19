@@ -69,22 +69,17 @@ Cheap pure checks → signature recovery → chain state. Chain reads only happe
 
 ## Chain registry
 
-`src/chains.ts` is a **vendored copy** of `universal-blockchain-mcp/src/chains.ts` — the canonical source. Do not edit it here.
+`src/chains.ts` is self-contained — no sibling checkout, no vendoring, no sync script.
 
-```bash
-npm run sync:registry    # re-copy from canonical + restore vendoring header
-npm run check:registry   # fail loudly on drift (runs in `npm run quality`)
-```
+It briefly mirrored `universal-blockchain-mcp`'s registry, which was the wrong dependency in both directions: that package is a ZetaChain client with no reason to carry Robinhood Chain, and a facilitator should not need a neighbouring repo to build. Robinhood Chain now lives here and in `robinhood-chain-mcp`, each owning what it serves.
 
-Vendored rather than imported via `file:` because `universal-blockchain-mcp` currently cannot `npm install` (pre-existing peer conflict: typescript@5.9.3 vs @typescript-eslint/eslint-plugin@8.57.2). Once that's fixed, this should become a real dependency and the vendoring machinery deleted.
-
-The registry emits viem's `Chain` shape structurally via `toViemChain()` without importing viem, which is what lets the MCP (Foundry-based, no EVM lib) and this service (viem-based) share one definition.
+`toViemChain()` emits viem's `Chain` shape structurally without importing viem, so the definitions stay usable by consumers that have no EVM library.
 
 ## Development
 
 ```bash
 npm install
-npm run quality      # registry drift check + typecheck + tests
+npm run quality      # typecheck + tests
 npm run dev          # wrangler dev
 npm run deploy       # wrangler deploy
 ```
