@@ -24,6 +24,20 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run type-check
+
+  # Route check needs its own job pinned to node 24: --experimental-strip-types does
+  # not exist on node 20, so running it inside the version matrix fails there.
+  routes:
+    name: static routes
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
       # Hermetic: constructs the app and exercises its static routes. /health is
       # excluded deliberately — it asserts on-chain state and belongs in the canary.
       - run: node --experimental-strip-types test/ci-routes.mjs
