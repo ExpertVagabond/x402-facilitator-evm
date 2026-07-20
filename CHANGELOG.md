@@ -6,6 +6,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 
 ## [Unreleased]
 
+### Deployed
+
+- Live at `https://x402-facilitator-evm.purplesquirrelnetworks.workers.dev` (Cloudflare Workers, PSM account). Verified in production against live chain: `/health` reports USDG `domainSeparatorMatches: true`; `/verify` correctly returns `insufficient_funds` for a valid signature from an empty account (proves recovery + live balance read), and `invalid_signature` for both a tampered signature and a cross-chain replay.
+
 ### Changed
 
 - wrangler 3 → 4 and `@cloudflare/workers-types` 4 → 5. wrangler 3.114 warned on every invocation that it was out-of-date and risked critical errors; wrangler 4 requires workers-types v5 as a peer, so both had to move together. `wrangler.toml` needed no changes.

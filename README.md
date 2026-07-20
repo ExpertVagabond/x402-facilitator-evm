@@ -6,6 +6,8 @@
 
 Verify-only [x402](https://x402.org) facilitator for **Robinhood Chain** (`eip155:4663`), settling in **USDG**.
 
+**🟢 Live:** `https://x402-facilitator-evm.purplesquirrelnetworks.workers.dev`
+
 ## Why this exists
 
 The hosted facilitator at `x402.org/facilitator` serves exactly one EVM network. Confirmed by querying it directly:
@@ -97,4 +99,4 @@ Tests sign **real** EIP-3009 authorizations with throwaway keys and run them aga
 
 ## Status
 
-Not deployed (Cloudflare auth pending). Verify-only, no keys, no settlement.
+**Deployed** to Cloudflare Workers at `https://x402-facilitator-evm.purplesquirrelnetworks.workers.dev` (PSM account). Verify-only, no keys, no settlement.
